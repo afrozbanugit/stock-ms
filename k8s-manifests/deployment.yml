@@ -18,3 +18,21 @@ spec:
               image: aafrozbanu/stock-ms:latest
               ports:
               - containerPort: 8082
+              env:
+                - name: DB_NAME
+                    value: my-mysql-db
+                - name: DB_HOST
+                    valueFrom:
+                    configMapKeyRef:
+                        name: db-config
+                        key: host
+                - name: SPRING_DATASOURCE_USERNAME
+                    valueFrom:
+                    secretKeyRef:
+                        name: db-secret
+                        key: username
+                - name: SPRING_DATASOURCE_PASSWORD
+                    valueFrom:
+                    secretKeyRef:
+                        name: db-secret
+                        key: password

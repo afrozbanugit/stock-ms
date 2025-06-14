@@ -9,6 +9,9 @@ pipeline {
     AWS_CREDENTIALS_ID='Aws-login-id'
     AWS_REGION='us-west-1'
     CLUSTER_NAME='proj1-eks-cluster'
+    DB_USERNAME='DB_USERNAME'
+    DB_PWD='db_password_id'
+    DB_HOST='my-mysql-db.chaayacay20v.us-west-1.rds.amazonaws.com'
 	}
     stages {
          stage('Clean workspace'){
@@ -49,7 +52,19 @@ pipeline {
                 ]]) {
                     sh '''
                         aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+                         # Create secret and configmap
+                            kubectl create secret generic db-secret \
+                            --from-literal=username=$DB_USERNAME \
+                            --from-literal=password=$DB_PWD \
+                            --dry-run=client -o yaml | kubectl apply -f -
+
+                            kubectl create configmap db-config \
+                            --from-literal=host=$DB_HOST \
+                            --dry-run=client -o yaml | kubectl apply -f -
+
+                        # Deploy App
                         sed -i "s|image: .*|image: ${IMAGE}:${IMAGE_TAG}|" stock-ms/k8s-manifests/deployment.yml
+                        # Now deploy renamed image
                         kubectl apply -f stock-ms/k8s-manifests/deployment.yml
                         kubectl apply -f stock-ms/k8s-manifests/service.yml
                     '''
