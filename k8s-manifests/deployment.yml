@@ -20,7 +20,7 @@ spec:
               - containerPort: 8082
               env:
                 - name: DB_NAME
-                  value: my-mysql-db
+                  value: stockdb
                 - name: DB_HOST
                   valueFrom:
                     configMapKeyRef:
