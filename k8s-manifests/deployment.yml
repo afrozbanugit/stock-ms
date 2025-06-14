@@ -22,17 +22,17 @@ spec:
                 - name: DB_NAME
                   value: my-mysql-db
                 - name: DB_HOST
-                    valueFrom:
+                  valueFrom:
                     configMapKeyRef:
                         name: db-config
                         key: host
                 - name: SPRING_DATASOURCE_USERNAME
-                    valueFrom:
+                  valueFrom:
                     secretKeyRef:
                         name: db-secret
                         key: username
                 - name: SPRING_DATASOURCE_PASSWORD
-                    valueFrom:
+                  valueFrom:
                     secretKeyRef:
                         name: db-secret
                         key: password
