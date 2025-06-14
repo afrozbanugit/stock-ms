@@ -11,4 +11,5 @@ spec:
         - protocol: TCP
           port: 80  # Port that the service exposes (can be different from the container port)
           targetPort: 8082 # Port that the service listens on inside the container
-          nodePort: 30009 #(Port exposed on each node between 30000 and 32767)
+          # nodePort: 30009 #(Port exposed on each node between 30000 and 32767) Not needed since we are using
+          #LoadBalancer
