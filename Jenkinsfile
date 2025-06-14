@@ -49,7 +49,7 @@ pipeline {
                 ]]) {
                     sh '''
                         aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
-                        sh pwd
+                        sh "pwd"
                         sh "sed -i 's|image: .*|image: ${IMAGE}:${IMAGE_TAG}|' stock-ms/k8s-manifests/deployment.yml"
                         sh "kubectl apply -f stock-ms/k8s-manifests/deployment.yml"
                         kubectl apply -f stock-ms/k8s-manifests/service.yml
