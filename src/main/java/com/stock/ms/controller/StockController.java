@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,7 +67,10 @@ public class StockController {
 			kafkaPaymentTemplate.send("reversed-payments", pe);
 		}
 	}
-
+	@GetMapping("/health")
+	public String healthCheck(){
+		return "Stock-ms health ok!";
+	}
 	@PostMapping("/addItems")
 	public void addItems(@RequestBody Stock stock) {
 		Iterable<WareHouse> items = repository.findByItem(stock.getItem());
