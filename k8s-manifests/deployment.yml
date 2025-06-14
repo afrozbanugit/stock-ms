@@ -1,0 +1,20 @@
+---
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+    name: stock-ms-deployment
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: stock-ms
+    template:
+        metadata:
+            labels:
+                app: stock-ms
+        spec:
+            containers:
+            - name: stock-ms-container
+              image: aafrozbanu/stock-ms:latest
+              ports:
+              - containerPort: 8082
