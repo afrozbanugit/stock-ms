@@ -9,8 +9,6 @@ pipeline {
     AWS_CREDENTIALS_ID='Aws-login-id'
     AWS_REGION='us-west-1'
     CLUSTER_NAME='proj1-eks-cluster'
-    DB_USERNAME='DB_USERNAME'
-    DB_PWD='db_password_id'
     DB_HOST='my-mysql-db.chaayacay20v.us-west-1.rds.amazonaws.com'
 	}
     stages {
@@ -49,13 +47,19 @@ pipeline {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: "${AWS_CREDENTIALS_ID}"
-                ]]) {
+                ],
+                usernamePassword(
+                    credentialsId: 'rds-db-credentials',
+                    usernameVariable: 'DB_USERNAME',
+                    passwordVariable: 'DB_PASSWORD'
+            )
+                ]) {
                     sh '''
                         aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
                          # Create secret and configmap
                             kubectl create secret generic db-secret \
                             --from-literal=username=$DB_USERNAME \
-                            --from-literal=password=$DB_PWD \
+                            --from-literal=password=$DB_PASSWORD \
                             --dry-run=client -o yaml | kubectl apply -f -
 
                             kubectl create configmap db-config \
